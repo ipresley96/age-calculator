@@ -13,30 +13,31 @@ const calculatedDays = document.querySelector(".calculatedDays")
 const calcutedMonths = document.querySelector(".calculatedMonth")
 const calculatedYears = document.querySelector(".calculatedYears")
 
-
 const input = document.querySelectorAll('input')
 
 const label = document.querySelectorAll('label')
 
+const daysInMonth = getDaysInCurrentMonth(currentYear, currentMonth)
+console.log(daysInMonth)
 console.log(input)
 let birthYear;
 let birthDay;
 let birthMonth;
 
-const getBirthDay = () => birthYear < 1 ? birthDay = currentDay - dayBorn.value : birthDay = daysInCurrentMonth - (dayBorn.value - currentDay);
+
+const getBirthDay = () =>  birthDay = currentDay - dayBorn.value
     
 const getBirthMonth = () => birthMonth = currentMonth - monthBorn.value 
 
 const getBirthYear = () => birthYear = currentYear - yearBorn.value 
 
-
-
-   
-const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
-
-function getDaysInMonth(year, month) {
+function getDaysInCurrentMonth(year, month) {
     return new Date(year, month, 0).getDate();
 }
+
+
+
+console.log(daysInMonth)
 
 // error states 
 const emptyErrorState = () => {
@@ -92,6 +93,7 @@ const errorStyling = () => {
         item.style.color = "hsl(0, 100%, 67%)"
     })
 }
+
 dayBorn.addEventListener("keyup", getBirthDay)
 monthBorn.addEventListener("keyup", getBirthMonth)
 yearBorn.addEventListener("keyup", getBirthYear)
@@ -101,6 +103,23 @@ yearBorn.addEventListener("keyup", getBirthYear)
 const getAge = (event) => {
     event.preventDefault();
 
+    const daysInBirthMonth = getDaysInCurrentMonth(yearBorn.value, monthBorn.value)
+
+    if(birthDay < 0){
+        birthDay += daysInBirthMonth
+    }
+    console.log(birthDay)
+    console.log(daysInBirthMonth)
+    // let currentNumberOfDays;
+
+    // yearBorn.addEventListener('keyup', () => {
+    //     if(monthBorn.value !== "")
+    //     currentNumberOfDays = getDaysInCurrentMonth()
+    //     console.log(currentNumberOfDays)
+   // })
+    
+
+
     if(birthDay === undefined || birthMonth === undefined || birthYear === undefined){
         errorStyling()
         removeError()
@@ -108,19 +127,19 @@ const getAge = (event) => {
     } else if (currentYear < yearBorn.value
         || monthBorn.value > 12 
         || monthBorn.value < 1 
-        || dayBorn.value > daysInCurrentMonth) {
+        || dayBorn.value > daysInBirthMonth
+        ) {
             errorStyling()
             removeError()
             invalidErrorState()
-    } else {
-        
-        removeErrorStyling()
-        if(monthBorn.value > currentMonth){
-            birthYear -= 1
-            calcutedMonths.textContent = birthMonth + 11
-            console.log(monthBorn.value - currentMonth + 11)
-            console.log()
         } else {
+            removeErrorStyling()
+            if(monthBorn.value > currentMonth){
+                birthYear -= 1
+                calcutedMonths.textContent = birthMonth + 11
+                console.log(monthBorn.value - currentMonth + 11)
+                console.log()
+            } else {
             calcutedMonths.textContent = birthMonth
         }
         calculatedDays.textContent = birthDay
@@ -140,9 +159,7 @@ const getAge = (event) => {
 // event listeners 
 
 btn.addEventListener("click", getAge)
-// monthBorn.addEventListener("keyup", getBirthMonth)
-// yearBorn.addEventListener("keyup", getBirthYear)
-// dayBorn.addEventListener("keyup", getBirthDay)
+
 
 
 // Error state
